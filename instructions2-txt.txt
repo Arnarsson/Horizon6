@@ -1,0 +1,221 @@
+Luxury Horizon Drone Estimate Page - Setup Instructions (JavaScript)
+
+Prerequisites:
+- Node.js (v14 or later)
+- npm or yarn package manager
+
+Step 1: Set up a new Next.js project
+1. Open your terminal and run:
+   npx create-next-app@latest
+2. Follow the prompts to name your project and select your preferred options. Choose "No" when asked about using TypeScript.
+
+Step 2: Install dependencies
+Navigate to your project directory and run:
+npm install framer-motion lucide-react
+
+Step 3: Configure Tailwind CSS
+1. Install Tailwind CSS:
+   npm install -D tailwindcss postcss autoprefixer
+   npx tailwindcss init -p
+2. Update `tailwind.config.js`:
+   module.exports = {
+     content: [
+       "./pages/**/*.{js,jsx}",
+       "./components/**/*.{js,jsx}",
+     ],
+     theme: {
+       extend: {},
+     },
+     plugins: [],
+   }
+3. Add Tailwind directives to your `./styles/globals.css`:
+   @tailwind base;
+   @tailwind components;
+   @tailwind utilities;
+
+Step 4: Create the LuxuryHorizonDroneEstimate component
+1. Create a new file `components/LuxuryHorizonDroneEstimate.js`
+2. Add the following code to the file:
+
+import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
+import Image from 'next/image';
+import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const LuxuryHorizonDroneEstimate = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div className="bg-gray-900 text-white min-h-screen font-serif">
+      <Head>
+        <title>Horizon Drone Estimate | Luxury Aerial Photography</title>
+        <meta name="description" content="Get your premium drone estimate with Horizon - Capture the world from a new perspective" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      {/* Header */}
+      <header className="fixed w-full z-50 bg-gradient-to-b from-gray-900 to-transparent">
+        <div className="container mx-auto px-4 py-6 flex justify-between items-center">
+          <motion.h1 
+            className="text-3xl font-bold tracking-wider"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Horizon
+          </motion.h1>
+          <motion.button
+            className="text-white focus:outline-none"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </motion.button>
+        </div>
+      </header>
+
+      {/* Full-screen Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="fixed inset-0 bg-black bg-opacity-90 z-40 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.nav
+              className="text-center"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              {['Home', 'Services', 'Gallery', 'About', 'Contact'].map((item, index) => (
+                <motion.a
+                  key={item}
+                  href="#"
+                  className="block text-2xl my-4 text-gray-300 hover:text-orange-500 transition-colors duration-300"
+                  whileHover={{ scale: 1.1, x: 10 }}
+                  initial={{ x: -50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  {item}
+                </motion.a>
+              ))}
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Hero Section */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <motion.div 
+          className="absolute inset-0"
+          style={{ y: scrollY * -0.5 }}
+        >
+          <Image
+            src="/drone-hero.jpg"
+            alt="Drone flying over a dramatic landscape"
+            layout="fill"
+            objectFit="cover"
+            quality={100}
+            priority
+          />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900 opacity-70" />
+        <div className="relative z-10 text-center px-4">
+          <motion.h2 
+            className="text-5xl md:text-7xl font-bold mb-4 text-white shadow-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+          >
+            Get Your Drone Estimate
+          </motion.h2>
+          <motion.p 
+            className="text-xl md:text-2xl text-gray-300 mb-8 italic"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+          >
+            Capture the world from a new perspective
+          </motion.p>
+          <motion.button
+            className="bg-orange-500 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg hover:bg-orange-600 transition-colors duration-300"
+            whileHover={{ scale: 1.05, boxShadow: "0px 0px 8px rgb(255,165,0)" }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.5 }}
+          >
+            Get Started
+          </motion.button>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 text-center py-8">
+        <p className="text-gray-400">&copy; 2024 Horizon. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+};
+
+export default LuxuryHorizonDroneEstimate;
+
+Step 5: Update Next.js configuration
+1. Create or update `next.config.js` in your project root:
+   module.exports = {
+     images: {
+       domains: ['your-image-domain.com'],
+     },
+   }
+   Replace 'your-image-domain.com' with the domain of your hero image.
+
+Step 6: Add the hero image
+1. Place your hero image (e.g., 'drone-hero.jpg') in the `public` folder
+
+Step 7: Use the component in a page
+1. Update `pages/index.js`:
+   import LuxuryHorizonDroneEstimate from '../components/LuxuryHorizonDroneEstimate'
+
+   const Home = () => {
+     return <LuxuryHorizonDroneEstimate />
+   }
+
+   export default Home
+
+Step 8: Run the development server
+npm run dev
+
+Visit `http://localhost:3000` in your browser to see the Luxury Horizon Drone Estimate page.
+
+Additional Customization:
+- Update the color scheme in `tailwind.config.js` to match your brand colors
+- Modify the fonts by updating the `font-serif` class in the component or adding custom fonts to your project
+- Add additional sections or components as needed for your complete landing page
+- Implement actual functionality for the "Get Started" button and menu items
+
+Performance Optimization:
+- Use Next.js Image Optimization for all images
+- Implement server-side rendering (SSR) or static site generation (SSG) for improved performance and SEO
+- Lazy load non-critical components and content
+
+Accessibility:
+- Ensure proper aria labels are added to interactive elements
+- Test with screen readers and implement keyboard navigation
+
+SEO:
+- Update the `Head` component with appropriate meta tags for each page
+- Implement structured data if applicable
+
+Remember to replace placeholder content, implement actual functionality, and thoroughly test the component before deploying to production.

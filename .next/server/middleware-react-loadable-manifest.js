@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST="{\"pages\\\\index.js -> ../components/LuxuryHorizonDroneEstimate\":{\"id\":\"pages\\\\index.js -> ../components/LuxuryHorizonDroneEstimate\",\"files\":[\"static/chunks/components_LuxuryHorizonDroneEstimate_js.js\"]}}"
